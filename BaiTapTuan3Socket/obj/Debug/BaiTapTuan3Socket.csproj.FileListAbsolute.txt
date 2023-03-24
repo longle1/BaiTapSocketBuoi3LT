@@ -1,0 +1,13 @@
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\bin\Debug\BaiTapTuan3Socket.exe.config
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\bin\Debug\BaiTapTuan3Socket.exe
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\bin\Debug\BaiTapTuan3Socket.pdb
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.csproj.AssemblyReference.cache
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.csproj.SuggestedBindingRedirects.cache
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.Form1.resources
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.Properties.Resources.resources
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.csproj.GenerateResource.cache
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.csproj.CoreCompileInputs.cache
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.exe
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.pdb
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.Client.resources
+E:\lập trình c#\BaiTapTuan3Socket\BaiTapTuan3Socket\obj\Debug\BaiTapTuan3Socket.Server.resources
