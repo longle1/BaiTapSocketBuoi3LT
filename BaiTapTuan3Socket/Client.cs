@@ -11,7 +11,7 @@ namespace BaiTapTuan3Socket
 {
     public partial class Client : Form
     {
-        UdpClient clientUpd;
+        Socket client;
         IPEndPoint ipEndPoint;
         string userName;
         int portServer, portClient;
@@ -43,14 +43,14 @@ namespace BaiTapTuan3Socket
             ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portServer);
             string sendData = userName + ": " + txtSendMessage.Text;
             byte[] data = Encoding.UTF8.GetBytes(sendData);
-            clientUpd.Send(data, data.Length, ipEndPoint);
+            client.SendTo(data, ipEndPoint);
             txtSendMessage.Clear();
             WriteData("--->" + sendData);
         }
 
         private void WriteData(string msg)
         {
-            MethodInvoker invoker = new MethodInvoker(delegate { txtReceiveMessgae.AppendText( msg + Environment.NewLine); });
+            MethodInvoker invoker = new MethodInvoker(delegate { txtReceiveMessgae.AppendText(msg + Environment.NewLine); });
             this.BeginInvoke(invoker);
         }
         private void Client_Load(object sender, EventArgs e)
@@ -67,8 +67,10 @@ namespace BaiTapTuan3Socket
                 while (true)
                 {
                     ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                    byte[] receive_buffer = clientUpd.Receive(ref ipEndPoint);
-                    string receiveMsg = Encoding.UTF8.GetString(receive_buffer);
+                    EndPoint remote = (EndPoint)ipEndPoint;
+                    byte[] receive_buffer = new byte[1024];
+                    int length = client.ReceiveFrom(receive_buffer, ref remote);
+                    string receiveMsg = Encoding.UTF8.GetString(receive_buffer, 0, length);
                     WriteData("Server: " + receiveMsg);
                     string[] acceptShutdown = receiveMsg.Split(':');
                     if (acceptShutdown[1].Trim() == "Yêu cầu ngừng chat!!!")
@@ -77,7 +79,7 @@ namespace BaiTapTuan3Socket
                     }
                 }
                 WriteData("--->" + userName + ": Ngừng chat thành công!!!");
-                clientUpd.Close();
+                client.Close();
             }
             catch (Exception ex)
             {
@@ -87,7 +89,7 @@ namespace BaiTapTuan3Socket
         }
         private void btnCheckConnect_Click(object sender, EventArgs e)
         {
-            
+
             try
             {
                 if (!checkPort(txtPortClient.Text))
@@ -114,24 +116,31 @@ namespace BaiTapTuan3Socket
                     MessageBox.Show("Vui lòng nhập port server khác vơi port client");
                     return;
                 }
-                clientUpd = new UdpClient(portClient);
+
+
+                client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portClient);
+                client.Bind(ipEndPoint);
+
 
                 // Tiến trình gửi dữ liệu đi
                 string sendMesg = $"{userName}: xin chào Server!";
                 byte[] send_buffer = Encoding.UTF8.GetBytes(sendMesg);
                 ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portServer);
-                clientUpd.Send(send_buffer, send_buffer.Length, ipEndPoint);
+                client.SendTo(send_buffer, (EndPoint)ipEndPoint);
                 WriteData("--->" + sendMesg);
 
                 // Tiến trình nhận dữ liệu về
                 ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                byte[] receive_buffer = clientUpd.Receive(ref ipEndPoint);
-                string receiveMsg = Encoding.UTF8.GetString(receive_buffer);
+                EndPoint remote = (EndPoint)ipEndPoint;
+                byte[] receive_buffer = new byte[1024];
+                int length = client.ReceiveFrom(receive_buffer, ref remote);
+                string receiveMsg = Encoding.UTF8.GetString(receive_buffer, 0, length);
                 WriteData(receiveMsg);
                 Thread newThr1 = new Thread(new ThreadStart(rcvData));
                 newThr1.Start();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Vui lòng kết nối trước khi kiểm tra kết nối", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;

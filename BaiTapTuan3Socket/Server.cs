@@ -17,7 +17,7 @@ namespace BaiTapTuan3Socket
 {
     public partial class Server : Form
     {
-        UdpClient serverUdp;
+        UdpClient server;
         IPEndPoint ipEndPoint;
         int portServer, portClient;
         bool shutdown = true;
@@ -43,7 +43,7 @@ namespace BaiTapTuan3Socket
             ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portClient);
             string sendData = "Server: " + txtSendMessage.Text;
             byte[] data = Encoding.UTF8.GetBytes(sendData);
-            serverUdp.Send(data, data.Length, ipEndPoint);
+            server.Send(data, data.Length, ipEndPoint);
             txtSendMessage.Clear();
             WriteData("--->" + sendData);
 
@@ -84,7 +84,7 @@ namespace BaiTapTuan3Socket
                 MessageBox.Show("Vui lòng nhập port server khác vơi port client");
                 return;
             }
-            serverUdp = new UdpClient(portServer);
+            server = new UdpClient(portServer);
             string str = "Bắt đầu kết nối";
             WriteData(str);
             ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -103,14 +103,15 @@ namespace BaiTapTuan3Socket
         {
             try
             {
-                while(shutdown)
+                while (shutdown)
                 {
                     ipEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                    byte[] receive_buffer = serverUdp.Receive(ref ipEndPoint);
+                    byte[] receive_buffer = server.Receive(ref ipEndPoint);
                     string receiveMsg = Encoding.UTF8.GetString(receive_buffer);
                     WriteData(receiveMsg);
                 }
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show("Đã ngừng chat");
                 return;
@@ -123,17 +124,17 @@ namespace BaiTapTuan3Socket
             ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portClient);
             string sendData = "Server: " + "Yêu cầu ngừng chat!!!";
             byte[] data = Encoding.UTF8.GetBytes(sendData);
-            serverUdp.Send(data, data.Length, ipEndPoint);
+            server.Send(data, data.Length, ipEndPoint);
             txtSendMessage.Clear();
             WriteData("--->" + sendData);
-            serverUdp.Close();
+            server.Close();
         }
 
         private void ConnectServer()
         {
 
             //tiến trình nhận dữ liệu về
-            byte[] receive_buffer = serverUdp.Receive(ref ipEndPoint);
+            byte[] receive_buffer = server.Receive(ref ipEndPoint);
             string msg = Encoding.UTF8.GetString(receive_buffer);
             WriteData(msg);
 
@@ -143,7 +144,7 @@ namespace BaiTapTuan3Socket
             ipEndPoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), portClient);
             string dataSend = $"Server: Xin chào {getUsername[0]}!";
             byte[] send_buffer = Encoding.UTF8.GetBytes(dataSend);
-            serverUdp.Send(send_buffer, send_buffer.Length, ipEndPoint);
+            server.Send(send_buffer, send_buffer.Length, ipEndPoint);
             WriteData("--->" + dataSend);
 
 
